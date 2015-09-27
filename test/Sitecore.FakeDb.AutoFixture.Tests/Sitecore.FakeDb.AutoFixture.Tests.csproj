@@ -131,6 +131,7 @@
     <Compile Include="AutoContentCustomizationTest.cs" />
     <Compile Include="AddContentItemCommandTest.cs" />
     <Compile Include="Samples\ContentSearchProviderSample.cs" />
+    <Compile Include="Samples\ItemRepositorySample.cs" />
     <Compile Include="Samples\SwitchingBucketProviderSample.cs" />
     <Compile Include="Samples\SwitchingLinkProviderSample.cs" />
     <Compile Include="DatabaseSpecimenBuilderTest.cs" />

@@ -14,7 +14,7 @@
         0,
         new FilteringSpecimenBuilder(
           new Postprocessor(
-            new MethodInvoker(new ListFavoringConstructorQuery()),
+            new MethodInvoker(new GreedyConstructorQuery()),
             new AddContentDbItemCommand()),
           new DbItemSpecification()));
     }
