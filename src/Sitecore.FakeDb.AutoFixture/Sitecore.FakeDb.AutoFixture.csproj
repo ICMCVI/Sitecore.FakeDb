@@ -67,6 +67,7 @@
     <Compile Include="ContextDatabaseSpecimenBuilder.cs" />
     <Compile Include="DbItemParameterSpecification.cs" />
     <Compile Include="AddFieldsSpecimenCommand.cs" />
+    <Compile Include="DbFieldsCustomization.cs" />
     <Compile Include="ItemParameterSpecification.cs" />
     <Compile Include="TemplateItemSpecimenBuilder.cs" />
     <Compile Include="AutoContentCustomization.cs" />
