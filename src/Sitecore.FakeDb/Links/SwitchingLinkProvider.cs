@@ -130,7 +130,7 @@ namespace Sitecore.FakeDb.Links
       return current != null ? current.ParseRequestUrl(request) : base.ParseRequestUrl(request);
     }
 
-#if SC81 || SC811
+#if SC81 || SC811 || SC812
     public override SiteInfo ResolveTargetSite(Item item)
     {
       var current = this.CurrentProvider;

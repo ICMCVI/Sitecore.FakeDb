@@ -1,4 +1,4 @@
-﻿#if SC80 || SC81 || SC811
+﻿#if SC80 || SC81 || SC811 || SC812
 namespace Sitecore.FakeDb.AutoFixture.Tests.Samples
 {
   using NSubstitute;

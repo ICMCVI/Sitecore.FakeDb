@@ -23,7 +23,7 @@
       LinkProviderSwitcher.CurrentValue.Should().BeSameAs(provider);
     }
 
-#if SC80 || SC81 || SC811
+#if SC80 || SC81 || SC811 || SC812
     [Theory, AutoData]
     public void SutSwitchesSwitcherSitecoreLinkProvider([Frozen]LinkProvider provider, LinkProviderSwitcher sut)
     {
@@ -48,7 +48,7 @@
       {
 #if SC72
         LinkManager.Providers["switcher"].GetItemUrl(item, options).Should().Be("http://myawesomeurl.com");
-#elif SC80 || SC81 || SC811
+#elif SC80 || SC81 || SC811 || SC812
         LinkManager.GetItemUrl(item, options).Should().Be("http://myawesomeurl.com");
 #endif
       }
