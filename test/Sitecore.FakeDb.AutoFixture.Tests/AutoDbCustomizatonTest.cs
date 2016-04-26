@@ -3,7 +3,7 @@
   using System;
   using FluentAssertions;
   using Ploeh.AutoFixture;
-  using Ploeh.AutoFixture.Xunit2;
+  using Ploeh.AutoFixture.Kernel;
   using Sitecore.Data;
   using Sitecore.Data.Items;
   using Sitecore.Pipelines;
@@ -12,78 +12,105 @@
 
   public class AutoDbCustomizatonTest
   {
-    [Theory, AutoDbData]
-    public void ShouldReturnMasterDatabaseInstance(Database database)
+    [Fact]
+    public void ShouldReturnDatabaseInstance()
     {
+      // arrange
+      var fixture = new Fixture();
+      fixture.Customize(new AutoDbCustomization());
+
+      // act
+      var database = fixture.Create<Database>();
+
+      // assert
       database.Name.Should().Be("master");
     }
 
-    [Theory, AutoDbData]
-    public void ShouldInitializeDatabase(Database database)
+    [Fact]
+    public void ShouldInitializeDatabase()
     {
+      // arrange
+      var fixture = new Fixture();
+      fixture.Customize(new AutoDbCustomization());
+
+      // act
       Action action = () => Database.GetDatabase("master").GetItem("/sitecore/content");
+
+      // assert
       action.ShouldNotThrow();
     }
 
-    [Theory, AutoDbData]
-    public void ShouldCreateItemInstance(Item item)
+    [Fact]
+    public void ShouldCreateItemInstance()
     {
+      // arrange
+      var fixture = new Fixture();
+      fixture.Customize(new AutoDbCustomization());
+
+      // act
+      var item = fixture.Create<Item>();
+
+      // assert
       item.Should().NotBeNull();
     }
 
-    [Theory, AutoDbData]
-    public void ShouldCreatePipelineArgs(PipelineArgs pipelineArgs)
+    [Fact]
+    public void ShouldCreatePipelineArgs()
     {
+      // arrange
+      var fixture = new Fixture();
+      fixture.Customize(new AutoDbCustomization());
+
+      // act
+      var pipelineArgs = fixture.Create<PipelineArgs>();
+
+      // assert
       pipelineArgs.Should().NotBeNull();
     }
 
-    [Theory, AutoDbData]
-    public void ShouldCreateRuleContext(RuleContext ruleContext)
+    [Fact]
+    public void ShouldCreateRuleContext()
     {
+      // arrange
+      var fixture = new Fixture();
+      fixture.Customize(new AutoDbCustomization());
+
+      // act
+      var ruleContext = fixture.Create<RuleContext>();
+
+      // assert
       ruleContext.Should().NotBeNull();
     }
 
-    [Theory, AutoDbData]
-    public void ShouldCreateAndAddDbItem(Db db, DbItem item)
+    [Fact]
+    public void ShouldCreateAndAddDbItem()
     {
-      Action action = () => db.Add(item);
-      action.ShouldNotThrow();
+      // arrange
+      var fixture = new Fixture();
+      fixture.Customize(new AutoDbCustomization());
+
+      var db = fixture.Create<Db>();
+      var item = fixture.Create<DbItem>();
+
+      // act
+      db.Add(item);
     }
 
-    [Theory, AutoDbData]
-    public void ShouldShareFrozenStringWhenCreateItem([Frozen]string frozenString, Item item)
+    [Fact]
+    public void SutSharesTempalteIdWithFreezeOnMatchCustomization()
     {
-      item.Name.Should().Be(frozenString);
+      var fixture = new Fixture()
+        .Customize(new AutoDbCustomization())
+        .Customize(new FreezeOnMatchCustomization(typeof(ID), new ParameterSpecification(typeof(ID), "templateId")));
+
+      fixture.Create<CustomDbTemplate>().ID.Should().BeSameAs(fixture.Create<DbItem>().TemplateID);
     }
 
-    [Theory, AutoDbData]
-    public void ShouldCreateContentItem([Content] Item item, Database database)
+    // ReSharper disable once ClassNeverInstantiated.Local
+    private class CustomDbTemplate : DbTemplate
     {
-      database.GetItem(item.ID).Should().NotBeNull();
-    }
-
-    [Theory, AutoDbData]
-    public void ShouldCreateContentDbItem([Content] DbItem item, Database database)
-    {
-      database.GetItem(item.ID).Should().NotBeNull();
-    }
-
-    [Theory, AutoDbData]
-    public void ShouldGenerateBranchId(DbItem item)
-    {
-      item.BranchId.Should().NotBeNull();
-    }
-
-    [Theory, AutoDbData]
-    public void ShouldGetPreviouslyGeneratedBranchIdWhenUseContentAttribute([Content]Item item)
-    {
-      item.BranchId.Should().BeSameAs(item.Database.GetItem(item.ID).BranchId);
-    }
-
-    private class AutoDbDataAttribute : AutoDataAttribute
-    {
-      public AutoDbDataAttribute()
-        : base(new Fixture().Customize(new AutoDbCustomization()))
+      public CustomDbTemplate(ID templateId)
+        : base(templateId)
       {
       }
     }
